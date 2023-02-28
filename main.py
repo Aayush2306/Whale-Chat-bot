@@ -60,6 +60,9 @@ def load_cached_data(file_name):
 #cache_data(game, gameCache)
 #cache_data(mainData, mainDataCache)
 
+game = load_cached_data(gameCache)
+mainData = load_cached_data(mainDataCache)
+
 def fromPairGetToken(pair):
   api_key = "GFe9A3lNYWFSv1jO5NmC14bUHeW4oedryp1BPUHxAnAMZUL7C3Nd0Ppjaru3003R"
   params = {
@@ -173,8 +176,7 @@ print(verifiedAddyCache)
 allowed = load_cached_data(file_name)
 wallets = load_cached_data(addys_cache)
 print(allowed, wallets)
-game = load_cached_data(gameCache)
-mainData = load_cached_data(mainDataCache)
+
 
 
 @bot.message_handler(commands=['check'])
