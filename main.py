@@ -93,7 +93,7 @@ def entry(message):
     if message.text.split(" ")[1].startswith("0x"):
       id = message.chat.id
       wallet = message.text.split(" ")[1]
-      if id in game and wallet in game:
+      if id in game:
         bot.send_message(message.chat.id,
                          f"You have already added a wallet once")
       else:
