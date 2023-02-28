@@ -57,8 +57,8 @@ def load_cached_data(file_name):
 #cache_data(allowed, file_name)
 #cache_data(verifiedAddyCache, addy_cache)
 #cache_data(wallets, addys_cache)
-cache_data(game, gameCache)
-cache_data(mainData, mainDataCache)
+#cache_data(game, gameCache)
+#cache_data(mainData, mainDataCache)
 
 def fromPairGetToken(pair):
   api_key = "GFe9A3lNYWFSv1jO5NmC14bUHeW4oedryp1BPUHxAnAMZUL7C3Nd0Ppjaru3003R"
@@ -83,6 +83,49 @@ def fromPairGetToken(pair):
   return str
 
 
+
+@bot.message_handler(commands=['contest'])
+def entry(message):
+  global game
+  global mainData
+  lentgh = len(message.text.split(" "))
+  if lentgh == 2:
+    if message.text.split(" ")[1].startswith("0x"):
+      id = message.chat.id
+      wallet = message.text.split(" ")[1]
+      if id in game and wallet in game:
+        bot.send_message(message.chat.id,
+                         f"You have already added a wallet once")
+      else:
+        wallet = message.text.split(" ")[1]
+        try:
+          balance = w4.eth.get_balance(wallet)
+          balance_in_bnb = w3.fromWei(balance, 'ether')
+          balance_in_bnb = round(balance_in_bnb, 3)
+          game.append(id)
+          game.append(wallet)
+          mainData[wallet] = [id, message.chat.username]
+          cache_data(game, gameCache)
+          cache_data(mainData, mainDataCache)
+          bot.send_message(
+            message.chat.id,
+            f"<b><i>You've entered the contest good luck</i></b>",
+            parse_mode="html")
+        except:
+          bot.send_message(
+            message.chat.id,
+            f"<b><i>You've sent a wrong wallet address try again </i></b>",
+            parse_mode="html")
+
+    else:
+      bot.send_message(message.chat.id,
+                       f"<b><i>That not the correct input format</i?</b>",
+                       parse_mode="html")
+  else:
+    bot.send_message(
+      message.chat.id,
+      f"<b><i>Use /entry then your wallet address to get entered in the contest</i></b>",
+      parse_mode="html")
 
 
 
