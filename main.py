@@ -124,7 +124,7 @@ def entry(message):
   else:
     bot.send_message(
       message.chat.id,
-      f"<b><i>Use /entry then your wallet address to get entered in the contest</i></b>",
+      f"<b><i>Use /contest then your wallet address to get entered in the contest</i></b>",
       parse_mode="html")
 
 
