@@ -15,6 +15,10 @@ Api_key = "5964876840:AAHe5gbeYg9e1BtPIX2WJauspGbwWd1i1Ao"
 infura = "https://mainnet.infura.io/v3/c1f653384020470d942fdd4d8eb97795"
 bscApi = "JIW519CDP82K5S9QU9JFN8CPP8TRFSWXT7"
 w3 = Web3(Web3.HTTPProvider(infura))
+bnb = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+bnb = bnb.lower()
+usdt = "0x55d398326f99059ff775485246999027b3197955"
+usdt = usdt.lower()
 
 w4 = Web3(
   Web3.HTTPProvider(
@@ -48,6 +52,68 @@ def load_cached_data(file_name):
 #cache_data(allowed, file_name)
 #cache_data(verifiedAddyCache, addy_cache)
 #cache_data(wallets, addys_cache)
+
+def fromPairGetToken(pair):
+  api_key = "GFe9A3lNYWFSv1jO5NmC14bUHeW4oedryp1BPUHxAnAMZUL7C3Nd0Ppjaru3003R"
+  params = {
+    "addresses": [pair],
+    "chain": "bsc",
+  }
+
+  result = evm_api.token.get_token_metadata(
+    api_key=api_key,
+    params=params,
+  )
+
+  #print(result, pair)
+  name = result[0]['name']
+  link = f"<a href='https://poocoin.app/tokens/{pair}'>Poocoin</a>"
+  buy = f"https://t.me/MaestroSniperBot?start={pair}"
+  addy = f"<a href='bscscan.com/token/{pair}'>Contract</a>"
+  buyM = f"<a href='{buy}'>Maestro</a>"
+  honeypot = f"<a href='https://honeypot.is/?address={pair}'>Honeypot Checker</a>"
+  str = f"{name} <pre>{pair}</pre>  \n {buyM}   {link}  {addy}  {honeypot}\n\n"
+  return str
+
+
+@bot.message_handler(commands=['recent'])
+def whalecheck(message):
+  pancakeswap = "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73"
+  abi = abiPcs
+  factory_contract = w4.eth.contract(address=pancakeswap, abi=abi)
+  block = w4.eth.block_number
+  events = factory_contract.events.PairCreated().createFilter(
+    fromBlock=block - 10000, toBlock=block).get_all_entries()[-1:-15:-1]
+  str = "<b><u>Latest Tokens Launched On Binance smart chain</u></b>\n\n"
+  for event in events:
+    a = event.transactionHash.hex()
+    api_key = "GFe9A3lNYWFSv1jO5NmC14bUHeW4oedryp1BPUHxAnAMZUL7C3Nd0Ppjaru3003R"
+    params = {
+      "transaction_hash": a,
+      "chain": "bsc",
+    }
+
+    result = evm_api.transaction.get_transaction(
+      api_key=api_key,
+      params=params,
+    )
+
+    hex = result['input'][:3]
+
+    #print(hex)
+    if hex == "0x6":
+      token0_address = event['args']['token0']
+      if token0_address.lower() == usdt or token0_address.lower() == bnb:
+        print("w")
+      else:
+        text = fromPairGetToken(token0_address)
+        #text = "halooooo"
+        str = F"{str} {text}"
+
+  bot.send_message(message.chat.id,
+                   f"<b><i>{str}</i></b>",
+                   parse_mode="html",
+                   disable_web_page_preview=True)
 
 verifiedAddyCache = load_cached_data(addy_cache)
 print(verifiedAddyCache)
