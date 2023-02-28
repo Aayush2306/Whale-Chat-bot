@@ -531,69 +531,150 @@ def order(message):
 @bot.message_handler(commands=["detect"])
 def detect(message):
   text = ""
-  if len(message.text.split(" ")) > 1:
+  if 2 == 1:
+    bot.send_message(
+      message.chat.id,
+      f"<b><i>This is a premium feature. to use this make sure you hold more than 1% of supply and then press /verify</i></b>",
+      parse_mode="html")
+  else:
+    if len(message.text.split(" ")) > 1:
 
-    if message.text.split(" ")[1].startswith("0x"):
-      if len(message.text.split(" ")) == 3:
-        ca = message.text.split(" ")[1]
-        check = (message.text.split(" ")[2])
-        if check.replace(".", "", 1).isdigit():
-          check = float((message.text.split(" ")[2]))
-          chainName = "bsc-mainnet"
-          try:
-            url = f"https://api.covalenthq.com/v1/{chainName}/tokens/{ca}/token_holders/?key=ckey_a4afa01c9791458a9a222c44612"
-            res = requests.get(url)
-            data = res.text
-            realD = json.loads(data)
-            masala = realD['data']['items']
+      if message.text.split(" ")[1].startswith("0x"):
+        if len(message.text.split(" ")) == 3:
+          ca = message.text.split(" ")[1]
+          check = (message.text.split(" ")[2])
+          if check.replace(".", "", 1).isdigit():
+            check = float((message.text.split(" ")[2]))
+            chainName = "bsc-mainnet"
+            try:
+              url = f"https://api.covalenthq.com/v1/{chainName}/tokens/{ca}/token_holders/?key=ckey_a4afa01c9791458a9a222c44612"
+              res = requests.get(url)
+              data = res.text
+              realD = json.loads(data)
+              masala = realD['data']['items']
               #print(masala[0])
-            decimal = int(masala[0]['contract_decimals'])
-            name = masala[0]['contract_name']
-            symbol = masala[0]['contract_ticker_symbol']
-            supply = int(masala[0]['total_supply']) / 10**decimal
+              decimal = int(masala[0]['contract_decimals'])
+              name = masala[0]['contract_name']
+              symbol = masala[0]['contract_ticker_symbol']
+              supply = int(masala[0]['total_supply']) / 10**decimal
               #topBuyer = round(topBuyer,3)
-            addy = getAddressInfo(masala)
-            poocoin = f"<a href='https://poocoin.app/tokens/{ca}'>Poocoin</a>"
-            maestro = f"<a href='https://t.me/MaestroSniperBot/?start={ca}'>Maestro</a>"
-            contract = f"<a href='https://bscscan.com/token/{ca}'>Contract</a>"
+              addy = getAddressInfo(masala)
+              poocoin = f"<a href='https://poocoin.app/tokens/{ca}'>Poocoin</a>"
+              maestro = f"<a href='https://t.me/MaestroSniperBot/?start={ca}'>Maestro</a>"
+              contract = f"<a href='https://bscscan.com/token/{ca}'>Contract</a>"
 
-          except:
-            bot.send_message(
+            except:
+              bot.send_message(
                 message.chat.id,
                 f"<b><i>Please Enter A Valid Binance Smart Chain Address</i></b>",
                 parse_mode="html")
-            return
-          info = getWalletAddys(addy, check)
-          count = info[0]
-          filterAddy = info[1]
-          if count == 0:
-            bot.send_message(
-              message.chat.id,
+              return
+            info = getWalletAddys(addy, check)
+            count = info[0]
+            filterAddy = info[1]
+            if count == 0:
+              bot.send_message(
+                message.chat.id,
                 f"<b><i>asic Info\n\nName:- {name}\nSymbol:-{symbol}\nTotalSupply:- {supply}\n\nNo Wallets Found with more than {check}bnb\n\n{poocoin}  {maestro} {contract}",
                 parse_mode="html",
                 disable_web_page_preview=True)
-          else:
-             for i, value in enumerate(filterAddy):
-              values = f"<a href='https://bscscan.com/address/{value}'>Wallet {i+1}</a>"
-              text = f"{text} {values}"
-            bot.send_message(
+            else:
+              for i, value in enumerate(filterAddy):
+                values = f"<a href='https://bscscan.com/address/{value}'>Wallet {i+1}</a>"
+                text = f"{text} {values}"
+              bot.send_message(
                 message.chat.id,
                 f"<b><i>Basic Info\n\nName:- {name}\nSymbol:-{symbol}\nTotalSupply:- <pre>{supply}</pre>\nContract:- <pre>{ca}</pre>\n\nThere are {count} wallets with more than {check}bnb\n\n{poocoin}    {maestro}    {contract}\n--------------------------------------------------\nList of wallets {text}</i></b>",
                 parse_mode="html",
                 disable_web_page_preview=True)
-        else:
+          else:
             bot.send_message(
               message.chat.id,
               f"<b><i>Youre not using the correct input format ❌\n\n<u>/detect then wallet adress and the bnb amount you want to check</u>\n\nExample:- /detect 0xDead 2</i></b>",
               parse_mode="html")
-      else:
+        else:
           bot.send_message(
             message.chat.id,
             f"<b><i>Youre not using the correct input format ❌\n\n<u>/detect then wallet adress and the bnb amount you want to check</u>\n\nExample:- /detect 0xDead 2</i></b>",
             parse_mode="html")
-    else:
+      else:
+        bot.send_message(message.chat.id,
+                         f"Thats not a valid contract ❌❌")
+
+
+@bot.message_handler(commands=["detect"])
+def detect(message):
+  text = ""
+  if message.chat.id not in allowed:
+    bot.send_message(
+      message.chat.id,
+      f"<b><i>This is a premium feature. to use this make sure you hold more than 1% of supply and then press /verify</i></b>",
+      parse_mode="html")
+  else:
+    if len(message.text.split(" ")) > 1:
+
+      if message.text.split(" ")[1].startswith("0x"):
+        if len(message.text.split(" ")) == 3:
+          ca = message.text.split(" ")[1]
+          check = (message.text.split(" ")[2])
+          if check.replace(".", "", 1).isdigit():
+            check = float((message.text.split(" ")[2]))
+            chainName = "bsc-mainnet"
+            try:
+              url = f"https://api.covalenthq.com/v1/{chainName}/tokens/{ca}/token_holders/?key=ckey_a4afa01c9791458a9a222c44612"
+              res = requests.get(url)
+              data = res.text
+              realD = json.loads(data)
+              masala = realD['data']['items']
+              #print(masala[0])
+              decimal = int(masala[0]['contract_decimals'])
+              name = masala[0]['contract_name']
+              symbol = masala[0]['contract_ticker_symbol']
+              supply = int(masala[0]['total_supply']) / 10**decimal
+              #topBuyer = round(topBuyer,3)
+              addy = getAddressInfo(masala)
+              poocoin = f"<a href='https://poocoin.app/tokens/{ca}'>Poocoin</a>"
+              maestro = f"<a href='https://t.me/MaestroSniperBot/?start={ca}'>Maestro</a>"
+              contract = f"<a href='https://bscscan.com/token/{ca}'>Contract</a>"
+
+            except:
+              bot.send_message(
+                message.chat.id,
+                f"<b><i>Please Enter A Valid Binance Smart Chain Address</i></b>",
+                parse_mode="html")
+              return
+            info = getWalletAddys(addy, check)
+            count = info[0]
+            filterAddy = info[1]
+            if count == 0:
+              bot.send_message(
+                message.chat.id,
+                f"<b><i>asic Info\n\nName:- {name}\nSymbol:-{symbol}\nTotalSupply:- {supply}\n\nNo Wallets Found with more than {check}bnb\n\n{poocoin}  {maestro} {contract}",
+                parse_mode="html",
+                disable_web_page_preview=True)
+            else:
+              for i, value in enumerate(filterAddy):
+                values = f"<a href='https://bscscan.com/address/{value}'>Wallet {i+1}</a>"
+                text = f"{text} {values}"
+              bot.send_message(
+                message.chat.id,
+                f"<b><i>Basic Info\n\nName:- {name}\nSymbol:-{symbol}\nTotalSupply:- <pre>{supply}</pre>\nContract:- <pre>{ca}</pre>\n\nThere are {count} wallets with more than {check}bnb\n\n{poocoin}    {maestro}    {contract}\n--------------------------------------------------\nList of wallets {text}</i></b>",
+                parse_mode="html",
+                disable_web_page_preview=True)
+          else:
+            bot.send_message(
+              message.chat.id,
+              f"<b><i>Youre not using the correct input format ❌\n\n<u>/detect then wallet adress and the bnb amount you want to check</u>\n\nExample:- /detect 0xDead 2</i></b>",
+              parse_mode="html")
+        else:
+          bot.send_message(
+            message.chat.id,
+            f"<b><i>Youre not using the correct input format ❌\n\n<u>/detect then wallet adress and the bnb amount you want to check</u>\n\nExample:- /detect 0xDead 2</i></b>",
+            parse_mode="html")
+      else:
         bot.send_message(message.chat.id,
                          f"Thats not a contract Address You dumb Bitch ❌❌")
+  
 
 
 bot.polling()
