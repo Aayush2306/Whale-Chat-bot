@@ -35,6 +35,10 @@ addyVerified = []
 verifiedAddyCache = {}
 devid = [795341146]
 wallets = []
+game = []
+mainData = {}
+mainDataCache = 'mainData.pickle'
+gameCache = 'game.pickle'
 
 
 def cache_data(data, file_name):
@@ -53,6 +57,8 @@ def load_cached_data(file_name):
 #cache_data(allowed, file_name)
 #cache_data(verifiedAddyCache, addy_cache)
 #cache_data(wallets, addys_cache)
+cache_data(game, gameCache)
+cache_data(mainData, mainDataCache)
 
 def fromPairGetToken(pair):
   api_key = "GFe9A3lNYWFSv1jO5NmC14bUHeW4oedryp1BPUHxAnAMZUL7C3Nd0Ppjaru3003R"
@@ -75,6 +81,9 @@ def fromPairGetToken(pair):
   honeypot = f"<a href='https://honeypot.is/?address={pair}'>Honeypot Checker</a>"
   str = f"{name} <pre>{pair}</pre>  \n {buyM}   {link}  {addy}  {honeypot}\n\n"
   return str
+
+
+
 
 
 @bot.message_handler(commands=['recent'])
@@ -121,6 +130,8 @@ print(verifiedAddyCache)
 allowed = load_cached_data(file_name)
 wallets = load_cached_data(addys_cache)
 print(allowed, wallets)
+game = load_cached_data(gameCache)
+mainData = load_cached_data(mainDataCache)
 
 
 @bot.message_handler(commands=['check'])
