@@ -119,7 +119,7 @@ def entry(message):
 
     else:
       bot.send_message(message.chat.id,
-                       f"<b><i>That not the correct input format</i?</b>",
+                       f"<b><i>That not the correct input format</i></b>",
                        parse_mode="html")
   else:
     bot.send_message(
