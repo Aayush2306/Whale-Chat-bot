@@ -649,7 +649,7 @@ def detect(message):
             if count == 0:
               bot.send_message(
                 message.chat.id,
-                f"<b><i>asic Info\n\nName:- {name}\nSymbol:-{symbol}\nTotalSupply:- {supply}\n\nNo Wallets Found with more than {check}bnb\n\n{poocoin}  {maestro} {contract}",
+                f"<b><i>asic Info\n\nName:- {name}\nSymbol:-{symbol}\nTotalSupply:- {supply}\n\nNo Wallets Found with more than {check}bnb\n\n{poocoin}  {maestro} {contract}</i></b>",
                 parse_mode="html",
                 disable_web_page_preview=True)
             else:
