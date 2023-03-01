@@ -179,6 +179,47 @@ print(allowed, wallets)
 
 
 
+@bot.message_handler(commands=['live'])
+def lpToken(message):
+  pancakeswap = "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73"
+  abi = abiPcs
+  factory_contract = w4.eth.contract(address=pancakeswap, abi=abi)
+  block = w4.eth.block_number
+  events = factory_contract.events.PairCreated().createFilter(
+    fromBlock=block - 5000, toBlock=block).get_all_entries()[-1:-20:-1]
+  str = "<b><u>Latest Tokens With Liqudity Added On Binance smart chain</u></b>\n\n"
+  for event in events:
+    a = event.transactionHash.hex()
+    api_key = "GFe9A3lNYWFSv1jO5NmC14bUHeW4oedryp1BPUHxAnAMZUL7C3Nd0Ppjaru3003R"
+    params = {
+      "transaction_hash": a,
+      "chain": "bsc",
+    }
+
+    result = evm_api.transaction.get_transaction(
+      api_key=api_key,
+      params=params,
+    )
+
+    hex = result['input'][:3]
+    if hex == "0xf":
+      #print(event)
+      token0_address = event['args']['token0']
+      if token0_address.lower() == usdt or token0_address.lower() == bnb:
+
+        print("w")
+      else:
+        text = fromPairGetToken(token0_address)
+        #text = "halooooo"
+        str = F"{str} {text}"
+
+  bot.send_message(message.chat.id,
+                   f"<b><i>{str}</i></b>",
+                   parse_mode="html",
+                   disable_web_page_preview=True)
+
+
+
 @bot.message_handler(commands=['check'])
 def checkDev(message):
   global verifiedAddyCache
