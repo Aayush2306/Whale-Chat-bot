@@ -10,6 +10,7 @@ from abi import abiPinksale
 import datetime
 from telebot import types
 from abi import abiPcs
+import random
 
 moralis_key = "GFe9A3lNYWFSv1jO5NmC14bUHeW4oedryp1BPUHxAnAMZUL7C3Nd0Ppjaru3003R"
 Api_key = "5964876840:AAHe5gbeYg9e1BtPIX2WJauspGbwWd1i1Ao"
@@ -563,9 +564,63 @@ def getWalletAddys(addy, check):
 
 @bot.message_handler(commands=['order'])
 def order(message):
+  bot.reply_to(message,
+               f"<b>Enter Your Contract Address</b>",
+               parse_mode="html")
+  bot.register_next_step_handler(message, get_token)
+
+
+def get_token(message):
+  ca = message.text
+  if ca.startswith("0x"):
+    bot.reply_to(
+      message,
+      f"<b>How much token is your requirement for whale chat ex 1%</b>",
+      parse_mode="html")
+    bot.register_next_step_handler(message, get_percentage, ca)
+  else:
+    bot.reply_to(
+      message,
+      "Sorry, that's not a valid contract. Please enter your contract again.")
+    bot.register_next_step_handler(message, get_token)
+    return
+
+
+def get_percentage(message, ca):
+  perc = message.text
+  bot.reply_to(
+    message,
+    f"<b>Enter the chat id for your private whale chat.\n\nif you dont know how to get that add rose bot in your group and then press /id and paste here</b>",
+    parse_mode="html")
+  bot.register_next_step_handler(message, get_chatId, ca, perc)
+
+
+def get_chatId(message, ca, perc):
+  chatId = message.text
+  bot.reply_to(message,
+               f"<b>Enter the project dev username</b>",
+               parse_mode="html")
+  bot.register_next_step_handler(message, get_dev, ca, perc, chatId)
+
+
+def get_dev(message, ca, perc, chatId):
+  dev = message.text
+  bot.reply_to(message, f"<b>Enter project telegram</b>", parse_mode="html")
+  bot.register_next_step_handler(message, get_telegram, ca, perc, chatId, dev)
+
+
+def get_telegram(message, ca, perc, chatId, dev):
+  telegram = message.text
+  random_number = random.randint(10000, 99999)
   bot.send_message(
     message.chat.id,
-    f"<b><u>Buy and burn .5 bnb worth of our tokens and then send a dm to @The_MightyGod</u></b>",
+    f"<b><i>Thanks for placing your dev your ticket is <pre>{random_number}</pre> message @WenCgWenCMC for any query</i></b>"
+  )
+  bot_id = -1001550693632
+
+  bot.send_message(
+    bot_id,
+    f"New Order\n\n Contract :- <pre>{ca}</pre>\n\nPercentage:-{perc}\n\nChatId:- <pre>{chatId}</pre>\n\nDev:- {dev}\n\nTelegram:- {telegram}",
     parse_mode="html")
 
 
