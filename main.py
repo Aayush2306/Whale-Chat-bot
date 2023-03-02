@@ -258,7 +258,7 @@ def start(message):
     message.chat.id,
     "https://ibb.co/X83hkfn",
     caption=
-    f"<i><b>Hey Welcome To Whale 🐋 Chat Bot</b>.\n\nuse /verify to verify you're a whale 🐋 and get acess to the private whale chat\n\nuse /ca to scan a contract and get detailed info</i>",
+    f"<i><b>Hey Welcome To Whale 🐋 Chat Bot</b>.\n\nuse /verify to verify you're a whale 🐋 and get acess to the private whale chat\n\nuse /ca to scan a contract and get detailed info\n\nuse /detect to find whale wallets of a token\n\nuse /recent to check most recent tokens launched\n\nuse /order to order your own custom whale chat bot</i>",
     parse_mode="html")
 
 
