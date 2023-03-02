@@ -133,6 +133,21 @@ def entry(message):
 
 
 
+@bot.message_handler(commands=["mw"])
+def mw(message):
+  mw = "0x1cddb101799d0795555b5806509988029a2b10E2"
+  balance = w4.eth.get_balance(mw)
+  balance = balance / 10**18
+  balance = round(balance, 2)
+  link = f"<a href='bscscan.com/address/{mw}'>Address</a>"
+  totalTx = w4.eth.getTransactionCount(mw)
+  bot.send_message(
+    message.chat.id,
+    f"<b>Marketing Wallet Information</b>\n\n<b>Balance:-</b> <i>{balance} BNB</i>\n<b>Total Transaction</b>:-<i>{totalTx}</i>\n\n{link}",
+    parse_mode="html",
+    disable_web_page_preview=True)    
+    
+    
 @bot.message_handler(commands=['recent'])
 def whalecheck(message):
   pancakeswap = "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73"
