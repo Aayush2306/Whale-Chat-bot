@@ -614,7 +614,7 @@ def get_telegram(message, ca, perc, chatId, dev):
   random_number = random.randint(10000, 99999)
   bot.send_message(
     message.chat.id,
-    f"<b><i>Thanks for placing your dev your ticket is <pre>{random_number}</pre> message @WenCgWenCMC for any query</i></b>"
+    f"<b><i>Thanks for placing your dev your ticket is <pre>{random_number}</pre> message @WenCgWenCMC for any query</i></b>",parse_mode="html"
   )
   bot_id = -1001550693632
 
